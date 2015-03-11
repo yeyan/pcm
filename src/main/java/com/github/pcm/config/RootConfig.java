@@ -1,12 +1,15 @@
 package com.github.pcm.config;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
@@ -19,6 +22,14 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 @Configuration
 @ComponentScan(basePackages = {"com.github.pcm"})
 public class RootConfig {
+
+    @Bean
+    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        PropertyPlaceholderConfigurer props = new PropertyPlaceholderConfigurer();
+        props.setLocation(new ClassPathResource("app.properties"));
+
+        return props;
+    }
 
     @Configuration
     @EnableWebMvc
@@ -47,6 +58,12 @@ public class RootConfig {
             resolver.setSuffix(".html");
 
             return resolver;
+        }
+
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry.addResourceHandler("/assets/**")
+                    .addResourceLocations("classpath:/assets/");
         }
     }
 
