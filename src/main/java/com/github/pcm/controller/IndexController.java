@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class IndexController {
 
     @RequestMapping("/")
-    public @ResponseBody String index() {
-        return "hello world";
+    public String index() {
+        return "index";
     }
-
 
     @RequestMapping("/hello/{name}")
     public @ResponseBody String hello(@PathVariable("name") String name) {
